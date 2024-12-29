@@ -4,7 +4,7 @@ project(LinearAlgebra VERSION 0.1.0 LANGUAGES C CXX)
 # sdl2
 find_package(SDL2 CONFIG REQUIRED)
 
-add_executable(LinearAlgebra main.cpp Vector3.cpp Matrix.cpp)
+add_executable(LinearAlgebra main.cpp Vector3.cpp Matrix3.cpp)
 
 target_link_libraries(LinearAlgebra
     PRIVATE

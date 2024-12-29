@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 
 #include "Vector3.hpp"
-#include "Matrix.hpp"
+#include "Matrix3.hpp"
 
 #define X_SCALE 1
 #define Y_SCALE 1
@@ -60,11 +60,11 @@ int main(int argc, char **argv)
             {sin(Z_ROTATION), cos(Z_ROTATION), 0},
             {0, 0, 1}};
 
-        Matrix xRotationMatrixM(xRotationMatrix);
-        Matrix yRotationMatrixM(yRotationMatrix);
-        Matrix zRotationMatrixM(zRotationMatrix);
+        Matrix3 xRotationMatrixM(xRotationMatrix);
+        Matrix3 yRotationMatrixM(yRotationMatrix);
+        Matrix3 zRotationMatrixM(zRotationMatrix);
 
-        Matrix rotationMatrix = xRotationMatrixM * yRotationMatrixM * zRotationMatrixM;
+        Matrix3 rotationMatrix = xRotationMatrixM * yRotationMatrixM * zRotationMatrixM;
 
         /* multiply_matrix(xRotationMatrix, yRotationMatrix, result);
         multiply_matrix(result, zRotationMatrix, rotationMatrix); */
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
             {0, Y_SCALE, 0},
             {0, 0, Z_SCALE}};
 
-        Matrix scaleMatrixM(scaleMatrix);
+        Matrix3 scaleMatrixM(scaleMatrix);
         for (int i = 0; i < 8; i++)
         {
             /* vertices[i] = vertices[i].matrixMultiplication(scaleMatrix); */
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
             {0, Y_SCALE_S * deltaTime + 1, 0},
             {0, 0, Z_SCALE_S * deltaTime + 1}};
 
-        Matrix scaleMatrixM(scaleMatrix);
+        Matrix3 scaleMatrixM(scaleMatrix);
 
         double xRotationMatrix[3][3] = {
             {1, 0, 0},
@@ -185,11 +185,11 @@ int main(int argc, char **argv)
             {sin(Z_ROTATION_S * deltaTime), cos(Z_ROTATION_S * deltaTime), 0},
             {0, 0, 1}};
 
-        Matrix xRotationMatrixM(xRotationMatrix);
-        Matrix yRotationMatrixM(yRotationMatrix);
-        Matrix zRotationMatrixM(zRotationMatrix);
+        Matrix3 xRotationMatrixM(xRotationMatrix);
+        Matrix3 yRotationMatrixM(yRotationMatrix);
+        Matrix3 zRotationMatrixM(zRotationMatrix);
 
-        Matrix rotationMatrix = xRotationMatrixM * yRotationMatrixM * zRotationMatrixM;
+        Matrix3 rotationMatrix = xRotationMatrixM * yRotationMatrixM * zRotationMatrixM;
 
         /* multiply_matrix(xRotationMatrix, yRotationMatrix, result);
         multiply_matrix(result, zRotationMatrix, rotationMatrix); */
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
             {0, 0, 0}};
         // lets make a cube in the 3D space creating vertexes with the Vector3 class in front of the plane z = 0
 
-        Matrix projectionMatrixM(projectionMatrix);
+        Matrix3 projectionMatrixM(projectionMatrix);
 
         for (int i = 0; i < 8; i++)
         {
