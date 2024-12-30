@@ -36,15 +36,6 @@ typedef Matrix<3, 3> Matrix3;
 
 int main(int argc, char **argv)
 {
-    /* double p1[3] = {1, 1, 1};
-    double p2[3] = {1, -1, 1};
-    double p3[3] = {-1, -1, 1};
-    double p4[3] = {-1, 1, 1};
-    double p5[3] = {1, 1, -1};
-    double p6[3] = {1, -1, -1};
-    double p7[3] = {-1, -1, -1};
-    double p8[3] = {-1, 1, -1}; */
-
     Vector3 vertices[] = {
         Vector3({1, 1, 1}),
         Vector3({1, -1, 1}),
@@ -68,10 +59,11 @@ int main(int argc, char **argv)
         Matrix3 scaleMatrixM(scaleMatrix);
         for (int i = 0; i < 8; i++)
         {
-            /* vertices[i] = vertices[i].matrixMultiplication(scaleMatrix); */
+            // scale the cube by the scale matrix
             vertices[i] = scaleMatrixM * vertices[i];
         }
 
+        // --- rotation matrix
         double xRotationMatrix[3][3] = {
             {1, 0, 0},
             {0, cos(X_ROTATION), -sin(X_ROTATION)},
@@ -103,7 +95,7 @@ int main(int argc, char **argv)
         }
 
         // ---
-        }
+    }
 
     // we made the projection of the cube on the plane z = 0
     // now we can draw the cube on the screen
@@ -178,7 +170,6 @@ int main(int argc, char **argv)
         SDL_RenderClear(ren);
 
         // lets do a projection on a plane with normal (0, 0, 1)
-        // lets build up the projection matrix
         double scaleMatrix[3][3] = {
             {X_SCALE_S * deltaTime + 1, 0, 0},
             {0, Y_SCALE_S * deltaTime + 1, 0},
@@ -219,14 +210,13 @@ int main(int argc, char **argv)
             vertices[i] = rotationMatrix * vertices[i];
         }
 
-        Vector3 renderVectors[8];
-        double projectionMatrix[3][3] = {
+        Vector<2> renderVectors[8];
+        double projectionMatrix[2][3] = {
             {1, 0, 0},
-            {0, 1, 0},
-            {0, 0, 0}};
+            {0, 1, 0}};
         // lets make a cube in the 3D space creating vertexes with the Vector3 class in front of the plane z = 0
 
-        Matrix3 projectionMatrixM(projectionMatrix);
+        Matrix<2, 3> projectionMatrixM(projectionMatrix);
 
         for (int i = 0; i < 8; i++)
         {

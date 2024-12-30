@@ -28,6 +28,11 @@ public:
     Matrix<N, P> operator*(Matrix<M, P> &other);
     // vector multiplication
     Vector<N> operator*(Vector<M> &vector);
+
+    double determinant();
+    Matrix<N, M> adjugate();
+    Matrix<M, N> inverse();
+
     // Print
     template <int Rows, int Cols>
     friend std::ostream &operator<<(std::ostream &os, const Matrix<Rows, Cols> &m);
@@ -155,6 +160,100 @@ inline Matrix<N, P> Matrix<N, M>::operator*(Matrix<M, P> &other)
         }
     }
     return result;
+}
+
+template <int N, int M>
+double Matrix<N, M>::determinant()
+{
+    static_assert(N == M, "Determinant can only be calculated for square matrices");
+
+    if constexpr (N == 1)
+    {
+        return m_matrix[0][0];
+    }
+    else if constexpr (N == 2)
+    {
+        // Base case for 2x2 matrix
+        return m_matrix[0][0] * m_matrix[1][1] - m_matrix[0][1] * m_matrix[1][0];
+    }
+    else
+    {
+        double det = 0.0;
+        for (int j = 0; j < M; j++)
+        {
+            if constexpr (N > 1 && M > 1) // Ensure N and M are greater than 1
+            {
+                Matrix<N - 1, M - 1> subMatrix;
+                for (int row = 1; row < N; row++)
+                {
+                    int subCol = 0;
+                    for (int col = 0; col < M; col++)
+                    {
+                        if (col == j)
+                            continue;
+                        subMatrix[row - 1][subCol] = m_matrix[row][col];
+                        subCol++;
+                    }
+                }
+                det += (j % 2 == 0 ? 1 : -1) * m_matrix[0][j] * subMatrix.determinant();
+            }
+        }
+        return det;
+    }
+}
+
+template <int N, int M>
+Matrix<N, M> Matrix<N, M>::adjugate()
+{
+    static_assert(N == M, "Adjugate can only be calculated for square matrices");
+
+    Matrix<N, M> adj;
+
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            // Compute the cofactor for element (i, j)
+            Matrix<N - 1, M - 1> subMatrix;
+
+            int subRow = 0;
+            for (int row = 0; row < N; row++)
+            {
+                if (row == i)
+                    continue;
+
+                int subCol = 0;
+                for (int col = 0; col < M; col++)
+                {
+                    if (col == j)
+                        continue;
+
+                    subMatrix[subRow][subCol] = m_matrix[row][col];
+                    subCol++;
+                }
+                subRow++;
+            }
+
+            // Element (i, j) of adjugate is the determinant of the submatrix
+            adj[j][i] = (i + j) % 2 == 0 ? subMatrix.determinant() : -subMatrix.determinant();
+        }
+    }
+
+    return adj;
+}
+
+template <int N, int M>
+Matrix<M, N> Matrix<N, M>::inverse()
+{
+    static_assert(N == M, "Inverse can only be calculated for square matrices");
+
+    double det = determinant();
+    if (det == 0)
+    {
+        throw std::runtime_error("Matrix is singular and cannot be inverted");
+    }
+
+    return adjugate() * (1 / det);
 }
 
 template <int Rows, int Cols>
