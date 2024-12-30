@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Vector3.hpp"
 
 Vector3::Vector3(double x, double y, double z)

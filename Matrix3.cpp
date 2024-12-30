@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Matrix3.hpp"
 
 #include <cstring>

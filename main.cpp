@@ -1,11 +1,14 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-#include "Vector3.hpp"
-#include "Matrix3.hpp"
+/* #include "Vector3.hpp"
+#include "Matrix3.hpp" */
+
+#include "math/Vector.hpp"
+#include "math/Matrix.hpp"
 
 #define X_SCALE 1
-#define Y_SCALE 1
+#define Y_SCALE 2
 #define Z_SCALE 1
 
 #define X_ROTATION M_PI / 4
@@ -28,22 +31,46 @@
 #define BACKGROUND_COLOR 0, 0, 0, 255
 #define EDGE_COLOR 255, 192, 203, 255
 
+typedef Vector<3> Vector3;
+typedef Matrix<3, 3> Matrix3;
+
 int main(int argc, char **argv)
 {
+    /* double p1[3] = {1, 1, 1};
+    double p2[3] = {1, -1, 1};
+    double p3[3] = {-1, -1, 1};
+    double p4[3] = {-1, 1, 1};
+    double p5[3] = {1, 1, -1};
+    double p6[3] = {1, -1, -1};
+    double p7[3] = {-1, -1, -1};
+    double p8[3] = {-1, 1, -1}; */
+
     Vector3 vertices[] = {
-        Vector3(1, 1, 1),
-        Vector3(1, -1, 1),
-        Vector3(-1, -1, 1),
-        Vector3(-1, 1, 1),
-        Vector3(1, 1, -1),
-        Vector3(1, -1, -1),
-        Vector3(-1, -1, -1),
-        Vector3(-1, 1, -1)};
+        Vector3({1, 1, 1}),
+        Vector3({1, -1, 1}),
+        Vector3({-1, -1, 1}),
+        Vector3({-1, 1, 1}),
+        Vector3({1, 1, -1}),
+        Vector3({1, -1, -1}),
+        Vector3({-1, -1, -1}),
+        Vector3({-1, 1, -1})};
 
     {
         // set up the cube to the starting position defined
         // by the X_ROTATION, Y_ROTATION and Z_ROTATION
         // and the scale defined by the X_SCALE, Y_SCALE and Z_SCALE
+
+        double scaleMatrix[3][3] = {
+            {X_SCALE, 0, 0},
+            {0, Y_SCALE, 0},
+            {0, 0, Z_SCALE}};
+
+        Matrix3 scaleMatrixM(scaleMatrix);
+        for (int i = 0; i < 8; i++)
+        {
+            /* vertices[i] = vertices[i].matrixMultiplication(scaleMatrix); */
+            vertices[i] = scaleMatrixM * vertices[i];
+        }
 
         double xRotationMatrix[3][3] = {
             {1, 0, 0},
@@ -76,18 +103,7 @@ int main(int argc, char **argv)
         }
 
         // ---
-        double scaleMatrix[3][3] = {
-            {X_SCALE, 0, 0},
-            {0, Y_SCALE, 0},
-            {0, 0, Z_SCALE}};
-
-        Matrix3 scaleMatrixM(scaleMatrix);
-        for (int i = 0; i < 8; i++)
-        {
-            /* vertices[i] = vertices[i].matrixMultiplication(scaleMatrix); */
-            vertices[i] = scaleMatrixM * vertices[i];
         }
-    }
 
     // we made the projection of the cube on the plane z = 0
     // now we can draw the cube on the screen
@@ -228,8 +244,8 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < 8; i++)
         {
-            renderVertexes[i].x = (int)(renderVectors[i].m_x * scale + offsetX);
-            renderVertexes[i].y = (int)(renderVectors[i].m_y * scale + offsetY);
+            renderVertexes[i].x = (int)(renderVectors[i][0] * scale + offsetX);
+            renderVertexes[i].y = (int)(renderVectors[i][1] * scale + offsetY);
         }
 
         SDL_SetRenderDrawColor(ren, EDGE_COLOR);
